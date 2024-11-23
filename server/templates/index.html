@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Agent Status</title>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+        <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -35,46 +35,33 @@
             <thead>
                 <tr>
                     <th>Machine ID</th>
-                    <th>Hostname</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody id="agent-list">
-                {% for client in clients.values() %}
-                <tr>
+                {% for sid, client in clients.items() %}
+                <tr data-sid="{{ sid }}">
                     <td>{{ client.machine_id }}</td>
-                    <td>{{ client.hostname or 'Unknown' }}</td>
                     <td>Connected</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-
         <script>
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-        
-        // Listen for updates about agent status
-        socket.on('agent_status_update', function(data) {
-            const action = data.action;
-            const machine_id = data.machine_id;
-            const table = document.getElementById('agent-list');
-            
-            if (action === 'connected') {
-                // Add new row for the connected agent
-                let row = table.insertRow();
-                row.insertCell(0).textContent = machine_id;
-                row.insertCell(1).textContent = "Unknown";  // You can update this to the hostname later if needed
-                row.insertCell(2).textContent = 'Connected';
-            } else if (action === 'disconnected') {
-                // Remove the row for the disconnected agent
-                for (let i = 0; i < table.rows.length; i++) {
-                    if (table.rows[i].cells[0].textContent === machine_id) {
-                        table.deleteRow(i);
-                        break;
-                    }
+            const socket = io.connect('/ws');
+
+            socket.on('agent_status_update', function (data) {
+                const table = document.getElementById('agent-list');
+                if (data.action === 'connected') {
+                    const row = document.createElement('tr');
+                    row.setAttribute('data-sid', data.machine_id);
+                    row.innerHTML = `<td>${data.machine_id}</td><td>Connected</td>`;
+                    table.appendChild(row);
+                } else if (data.action === 'disconnected') {
+                    const row = document.querySelector(`tr[data-sid="${data.machine_id}"]`);
+                    if (row) row.remove();
                 }
-            }
-        });
+            });
         </script>
     </body>
 
