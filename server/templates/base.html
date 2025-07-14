@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ThreatWatch Dashboard</title>
+    <meta name="author" content="NPFS">
+    <meta name="description" content="">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="ThreatWatch - DDoS Detection System">
+    <meta property="og:site_name" content="NPFS">
+    <meta property="og:url" content="http://localhost">
+    <meta property="og:type" content="website">
+    <meta name="twitter:title" content="ThreatWatch - DDoS Detection System">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+</head>
+
+<body class="bg-gray-50 font-sans">
+    {% include "components/header.html" %}
+    {% include "components/sidebar.html" %}
+    <main class="fixed inset-0 transition-all duration-300 bg-gray-100" style="top: 85px; left: 0; padding-left: 0;">
+        <div class="h-full overflow-y-auto lg:ml-64">
+            <main class="flex-1 p-6 overflow-y-auto">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </main>
+</body>
+</html>

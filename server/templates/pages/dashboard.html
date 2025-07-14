@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="dashboardContent" class="tab-content">
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Active Clients</p>
+                    <p class="text-2xl font-bold text-gray-800" id="active-clients">12</p>
+                </div>
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-desktop text-blue-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="flex items-center">
+                    <span class="pulse-dot w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                    <span class="text-sm text-gray-600">All systems operational</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Packets/Second</p>
+                    <p class="text-2xl font-bold text-gray-800" id="packets-per-sec">0</p>
+                </div>
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-tachometer-alt text-green-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="text-sm text-gray-600">Target: 10,000 pps</div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Bandwidth</p>
+                    <p class="text-2xl font-bold text-gray-800" id="bandwidth">0 Mbps</p>
+                </div>
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="text-sm text-gray-600">Peak: 150 Mbps</div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">Success Rate</p>
+                    <p class="text-2xl font-bold text-gray-800" id="success-rate">0%</p>
+                </div>
+                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-bullseye text-orange-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="text-sm text-gray-600">Target: 95%</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800">Traffic Overview</h3>
+            <canvas id="trafficChart" width="400" height="200"></canvas>
+        </div>
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800">Client Distribution</h3>
+            <canvas id="clientChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Client Status and Live Map -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Client Status -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800">Client Status</h3>
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span class="font-medium">Client-001</span>
+                    </div>
+                    <div class="flex items-center space-x-4 text-sm text-gray-600">
+                        <span>CPU: 45%</span>
+                        <span>RAM: 2.1GB</span>
+                        <span>UDP Flood</span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span class="font-medium">Client-002</span>
+                    </div>
+                    <div class="flex items-center space-x-4 text-sm text-gray-600">
+                        <span>CPU: 38%</span>
+                        <span>RAM: 1.8GB</span>
+                        <span>SYN Flood</span>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <span class="font-medium">Client-003</span>
+                    </div>
+                    <div class="flex items-center space-x-4 text-sm text-gray-600">
+                        <span>CPU: 78%</span>
+                        <span>RAM: 3.2GB</span>
+                        <span>HTTP Flood</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Geolocation Map -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800">Client Distribution Map</h3>
+            <div class="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
+                <div class="text-center">
+                    <i class="fas fa-map-marked-alt text-4xl text-gray-400 mb-2"></i>
+                    <p class="text-gray-600">Interactive map would be integrated here</p>
+                    <p class="text-sm text-gray-500">Showing client locations and target systems</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Other Tab Contents (Hidden by default) -->
+<div id="simulationContent" class="tab-content hidden">
+    <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-xl font-semibold mb-4 text-gray-800">Simulation Management</h3>
+        <p class="text-gray-600">Advanced simulation controls and configuration options will be displayed here.</p>
+    </div>
+</div>
+
+<div id="clientsContent" class="tab-content hidden">
+    <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-xl font-semibold mb-4 text-gray-800">Client Management</h3>
+        <p class="text-gray-600">Manage and monitor all connected clients from this panel.</p>
+    </div>
+</div>
+
+<div id="analyticsContent" class="tab-content hidden">
+    <div class="bg-white rounded-lg shadow-sm p-6">
+        <h3 class="text-xl font-semibold mb-4 text-gray-800">Analytics Dashboard</h3>
+        <p class="text-gray-600">Detailed analytics and performance metrics will be shown here.</p>
+    </div>
+</div>
+
+<div id="logsContent" class="tab-content hidden">
+    <div class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Live Logs</h3>
+            <div class="flex items-center space-x-2">
+                <select class="text-sm border border-gray-300 rounded px-2 py-1">
+                    <option>All Clients</option>
+                    <option>Client-001</option>
+                    <option>Client-002</option>
+                </select>
+                <button class="text-sm bg-gray-100 hover:bg-gray-200 px-2 py-1 rounded">
+                    <i class="fas fa-filter"></i>
+                </button>
+            </div>
+        </div>
+        <div class="bg-gray-900 text-green-400 p-4 rounded-lg h-96 overflow-y-auto font-mono text-sm"
+            id="logs-container">
+            <div>[2024-01-15 10:30:15] Client-001: Starting UDP flood attack...</div>
+            <div>[2024-01-15 10:30:16] Client-002: SYN flood initialized, target: 192.168.1.100</div>
+            <div>[2024-01-15 10:30:17] Client-001: Sending 1000 packets/sec</div>
+            <div>[2024-01-15 10:30:18] Client-003: HTTP flood attack commenced</div>
+            <div>[2024-01-15 10:30:19] System: Total throughput: 25.6 Mbps</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
